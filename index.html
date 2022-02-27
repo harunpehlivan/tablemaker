@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML Table Maker</title>
+    <!-- Facebook OpenGraph developers.facebook.com/docs/reference/opengraph/ -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="HTML Table Maker" />
+    <meta property="og:description" content="You tell it how many rows and columns you want, it writes all the table, tr, th, and td tags for you."
+    />
+    <meta property="og:url" content="https://alansimpson.me/html_css/tools/tablemaker.html" />
+    <meta property="og:image" content="https://alansimpson.me/html_css/tools/tablemakerog.jpg" />
+
+    <!-- Twitter domain approval dev.twitter.com/docs/cards/validation/validator -->
+    <!-- For twitter, content is "summary" as shown, or "photo" or "player" (for video) -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="HTML Table Maker">
+    <meta name="twitter:description" content="You tell it how many rows and columns you want, it writes all the table, tr, th, and td tags for you.">
+    <meta name="twitter:url" content="https://alansimpson.me/html_css/tools/tablemaker.html">
+    <meta name="twitter:image" content="ttps://alansimpson.me/html_css/tools/tablemakerog.jpg">
+    <!-- Shema.org microdata -->
+
+    <meta itemprop="name" content="HTML Table Maker">
+    <meta itemprop="description" content="You tell it how many rows and columns you want, it writes all the table, tr, th, and td tags for you.">
+    <meta itemprop="image" content="https://alansimpson.me/html_css/tools/tablemakerog.jpg">
+    <?php $IPATH = $_SERVER["DOCUMENT_ROOT"]."/assets/php/"; 
+    include($IPATH."meta.html"); ?>
+    <title>HTML Table Maker</title>
+    <style>
+        table.controls {
+            margin: 1em auto;
+            background-color: #eee;
+            width: auto;
+
+        }
+
+        table.controls td:nth-child(1) {
+            width: 300px;
+        }
+
+        table.controls td:nth-child(2) {
+            width: 120px;
+            text-align: center;
+        }
+
+        #coderesult {
+            display: block;
+            width: 90%;
+            height: auto;
+            overflow: visible;
+            margin: 1em auto;
+            border: solid 1px gray;
+            border-radius: 4px;
+            font-family: 'Source Code Pro', monospace;
+            color:black;
+        }
+    </style>
+</head>
+
+<body>
+    <?php include($IPATH."headernav.html"); ?>
+    <article>
+        <h1>HTML Table Maker</h1>
+        <p>Use the drop-downs to say how many rows and columns you want in your table. Then click Go. The table, td, th, and
+            td tags for that table will appear in the box below the button. Copy/paste those tags out of the box into your
+            page. Make sure you copy from the
+            <span class="pcode">&lt;table&gt;</span> tag to the
+            <span class="pcode">&lt/table&gt;</span> tag. The
+            <span class="pcode">border="1"</span> in the &lt;table&gt; tag is just there so that after you put the code in your own page, and
+            view that page in a browser, you can see where the border lines are. You can remove that
+            <span class="pcode">border="1"</span> if you don't want your table to show those border lines.</p>
+        <table class="controls">
+            <tr>
+                <td>How many columns across?</td>
+                <td>
+                    <select id="cols">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>How many rows down below header?</td>
+                <td>
+                    <select id="rows">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Include filler text?</td>
+                <td>
+                    <input type="radio" name="filler" id="filler1" value="1" checked>
+                    <label for="filler1">Yes</label>
+                    <input type="radio" name="filler" id="filler0" value="0">
+                    <label for="filler0">No</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <button id="go">Go</button>
+                </td>
+            </tr>
+        </table>
+        <textarea id="coderesult">
+
+        </textarea>
+        <p>Need a more complex table? Try
+            <a href="http://divtable.com/generator/">this</a> or
+            <a href="https://www.tablesgenerator.com/html_tables">this</a>.</p>
+    </article>
+    <?php include($IPATH."footer.html"); ?>
+    <script>
+        document.getElementById("go").addEventListener("click", function () {
+            var tbl = "<table border='1'>\n  <tr>\n"
+            tbl += "    <!-- Header cells -->\n    "
+            var colsddl = document.getElementById("cols");
+            var cols = colsddl.options[colsddl.selectedIndex].value;
+
+            var rowsddl = document.getElementById("rows");
+            var rows = rowsddl.options[rowsddl.selectedIndex].value;
+            //showfiller is 1 for Yes or zero for No
+            var showfiller = false;
+            if (parseInt(document.querySelector('input[name=filler]:checked').value) > 0) {
+                showfiller = true;
+            }
+            //Table header row
+            for (x = 0; x < cols; x++) {
+                tbl += "<th>"
+                if (showfiller) {
+                    tbl += "R1C" + x + 1;
+                }
+                tbl += "</th>"
+            }
+            tbl += "\n  </tr>\n\n"
+            //Remaining rows
+            tbl += "  <!-- Data rows and columns  -->\n"
+            for (row = 0; row < rows; row++) {
+                tbl += "  <tr>\n    "
+                for (x = 0; x < cols; x++) {
+                    tbl += "<td>"
+                    if (showfiller) {
+                        tbl += "R" + (row + 2) + "C" + (x + 1);
+                    }
+                    tbl += "</td>"
+                }
+                tbl += "\n  </tr>\n"
+            }
+
+            tbl += "</table>";
+            //Set the height of the table.
+            var result = document.getElementById("coderesult");
+            result.value = tbl;
+            result.style.height = "";
+            result.style.height = result.scrollHeight + "px";
+        });
+    </script>
+</body>
+
+</html>
